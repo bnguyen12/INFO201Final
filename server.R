@@ -28,7 +28,8 @@ server <- function(input, output) {
            x = "Age Group (years)",
            y = "# Found Positive (people)",
            color = "Flu Season by Year")
-    ggplotly(plot, tooltip = c("text"))
+    final.plot <- ggplotly(plot, tooltip = c("text"))
+    final.plot %>% layout(margin = list(l = 75, b = 75)) #shift axes text to the left to not overlap axis ticks
   })
   
   # Create a line graph for those infected with type A influenza
@@ -42,7 +43,8 @@ server <- function(input, output) {
            x = "Age Group (years)",
            y = "# Found Positive (people)",
            color = "Flu Season by Year")
-    ggplotly(plot, tooltip = c("text"))
+    final.plot <- ggplotly(plot, tooltip = c("text"))
+    final.plot %>% layout(margin = list(l = 75, b = 75))
   })
   
   # Create line graph for those infected with "other" (H3N2v)
@@ -56,7 +58,8 @@ server <- function(input, output) {
            x = "Age Group (years)",
            y = "# Found Positive (people)",
            color = "Flu Season by Year")
-    ggplotly(plot, tooltip = c("text"))
+    final.plot <- ggplotly(plot, tooltip = c("text"))
+    final.plot %>% layout(margin = list(l = 75, b = 75))
   })
 }
 
