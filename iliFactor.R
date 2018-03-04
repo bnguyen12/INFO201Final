@@ -1,44 +1,24 @@
 source("setup.R")
 
-ili.data.2015.2016 <- read.csv("./data/Washington_FluView_BySeason_2015-2016.csv", stringsAsFactors = FALSE)
-ili.data.2017.2018 <- read.csv("./data/Washington_FluView_BySeason_2017-2018.csv", stringsAsFactors = FALSE)
-flu.mortality.2015.2018 <- read.csv("./data/State_Washington_2015-18_Data.csv", stringsAsFactors = FALSE)
+ili.data <- read.csv("./data/ILI_Washington.csv", stringsAsFactors = FALSE) %>%
+  filter(YEAR != 2017) %>%
+  filter(YEAR == 2013 | YEAR == 2014 | YEAR == 2015 | YEAR == 2016) %>%
+  select(REGION, YEAR, WEEK, "ILI.Rate" = X.UNWEIGHTED.ILI)
+colnames(ili.data)[1] <- "state"
 
-ili.data <- full_join(ili.data.2015.2016, ili.data.2017.2018)
+death.data <- read.csv("./data/Flu_Death_Washington.csv", stringsAsFactors = FALSE) %>%
+  select(state, "YEAR" = Year, "WEEK" = Week, "Mortality.Rate" = Percent.of.Deaths.Due.to.Pneumonia.and.Influenza)
 
-
-ili.data <- ili.data %>% select(YEAR, WEEK, ILITOTAL, TOTAL.PATIENTS, 
-                                X.UNWEIGHTED.ILI, NUM..OF.PROVIDERS) %>% 
-                         rename(PERCENT_UNWEIGHTED_ILI = X.UNWEIGHTED.ILI, 
-                                NUMBER_OF_PROVIDERS = NUM..OF.PROVIDERS)
-
-#Contains flu mortality as well as ili reported cases
-flu.mortality.ili.data <- na.omit(full_join(flu.mortality.2015.2018, ili.data)) 
-
-
-
-
-
-
-
+full.data <- merge(death.data, ili.data)
 
 my.ui <- fluidPage(
-  
   sidebarLayout(
-  
     sidebarPanel(
-     
-      selectInput("year.select", "Select a Year", choices = c("2015" ,"2016", "2017", 
-                              "Current Year"), selected = "Current Year"),
-     
+      selectInput("year.death", "Select a Year", choices = c(2013, 2014, 2015, 2016), selected = 2016),
       sliderInput("week.slider", "Display weeks of choice", 
-                  min = 1, max = 52, value = c("", ""), sep = 1)
-      
-      
+                  min = 1, max = 37, value = c(1, 37), sep = 1)
     ),
     mainPanel(
-      
-      
       titlePanel("Influenza like illnesses compared to death rates"),
       p("This plot displays a visual of ili cases (influenza like illnesses) alongside a plot of the desired
         year's deaths. Severity of any illness is best represented by the number of deaths it has caused, as
@@ -46,79 +26,35 @@ my.ui <- fluidPage(
         is statistically prevalent that more people are checking into hospitals for ili cases out of concern 
         for having the actual flu. Therefor, the higher the death count, the greater the number of ili cases 
         in any given year."),
-      
-      plotOutput("ili.map")
-      
+      plotlyOutput("ili.map")
     )
-    
   )
-
-  
 )
 
 my.server <- function(input, output, session) {
+  death.current.data <- reactive({
+    data <- filter(full.data, YEAR == input$year.death) %>%
+      filter(WEEK >= input$week.slider[1] & WEEK <= input$week.slider[2])
+    return(data)
+  })
   
-  
-  
-  output$ili.map <- renderPlot({
-    #Takes in a data frame, a string for a desired year, and two integers to specify a week range
-    #that is then used to make a plot graph for ili/death rate data for the selected year.
-    
-    plot.builder <- function(mortality.ili.data, year.select, user.week, week.begin, week.end){
-      
-      suppressWarnings(flu.mortality.ili.data.year <- mortality.ili.data %>% filter(YEAR == year.select,
-                                                                  WEEK >= user.week & WEEK <= week.end))
-      
-      
-      updateSliderInput(session, "week.slider", value = c(user.week, user.week), 
-                                         min = week.begin, max = week.end)
-      
-      ili.plot <- ggplot(data = flu.mortality.ili.data.year, aes(x = WEEK, y = Percentage, group = YEAR)) +
-                  geom_line(aes(y = PERCENT_UNWEIGHTED_ILI, color = "ili cases")) +
-                  geom_line(aes(y = PERCENT.P.I, color = "Deaths"))
-      return(ili.plot)
+  output$ili.map <- renderPlotly({
+    if (input$year.death == 2016) {
+      updateSliderInput(session, "week.slider", max = 37)
+    } else {
+      updateSliderInput(session, "week.slider", max = 52)
     }
     
-  if(input$year.select == "2015"){
-    week.begin <- 40
-    week.end <- 52
-    user.week <- input$week.slider
-    plot.builder(flu.mortality.ili.data, "2015", user.week, week.begin, week.end)
-    
-  }
-  
-  else if(input$year.select == "2016"){
-    week.begin <- 1
-    week.end <- 52
-    user.week <- input$week.slider
-    plot.builder(flu.mortality.ili.data, "2016", user.week, week.begin, week.end)
-    
-  }
-  else if(input$year.select == "2017"){
-    week.begin <- 40
-    week.end <- 52
-    user.week <- input$week.slider
-    plot.builder(flu.mortality.ili.data, "2017", user.week, week.begin, week.end)
-    
-  }
-  else {
-      week.begin <- 1
-      week.end <- 5
-      user.week <- input$week.slider
-      plot.builder(flu.mortality.ili.data, "2018",user.week, week.begin, week.end)
-      
-    }
-  
-  }) 
-  
-
-  
-  
+    plot = ggplot(data = death.current.data()) +
+      geom_smooth(mapping = aes(x = WEEK, y = ILI.Rate, color = "ILI Rate")) +
+      geom_smooth(mapping = aes(x = WEEK, y = Mortality.Rate, color = "Mortality Rate")) +
+      labs(title = "Mortality Rate vs ILI Rate",
+           x = "Week",
+           y = "Percentage (%)",
+           color = "Category"
+      )
+    ggplotly(plot, tooltip = c("y"))
+  })
 }
-
-
-
-
-
 
 shinyApp(ui = my.ui, server = my.server)
