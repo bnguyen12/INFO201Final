@@ -1,6 +1,9 @@
 source("ageFactor.R")
+source("iliFactor.R")
 
-server <- function(input, output) {
+server <- function(input, output, session) {
+  
+  # Return dataset for infected people by age
   infected.data <- reactive({
     season.data <- ""
     if (input$season == "12-17") {
@@ -15,6 +18,32 @@ server <- function(input, output) {
                           "Type_H3N2v" = H3N2v) %>%
       select(Season, Age.Group, Type_A, Type_B, Type_H3N2v)
     return(season.data)
+  })
+  
+  # Returns dataset for mortality and ILI rate
+  death.current.data <- reactive({
+    data <- filter(full.data, YEAR == input$year.death) %>%
+      filter(WEEK >= input$week.slider[1] & WEEK <= input$week.slider[2])
+    return(data)
+  })
+  
+  # Renders plot of mortality vs ILI rate
+  output$ili.map <- renderPlotly({
+    if (input$year.death == 2016) {
+      updateSliderInput(session, "week.slider", max = 37)
+    } else {
+      updateSliderInput(session, "week.slider", max = 52)
+    }
+    
+    plot = ggplot(data = death.current.data()) +
+      geom_smooth(mapping = aes(x = WEEK, y = ILI.Rate, color = "ILI Rate")) +
+      geom_smooth(mapping = aes(x = WEEK, y = Mortality.Rate, color = "Mortality Rate")) +
+      labs(title = "Mortality Rate vs ILI Rate",
+           x = "Week",
+           y = "Percentage (%)",
+           color = "Category"
+      )
+    ggplotly(plot, tooltip = c("y"))
   })
   
   # Create a line graph for those infected with type A influenza
@@ -39,7 +68,7 @@ server <- function(input, output) {
                                                       group = Season, 
                                                       color = Season,
                                                       text = paste("infected", Type_B))) +
-      labs(title = "Infected With Type A Influenza",
+      labs(title = "Infected With Type B Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
            color = "Flu Season by Year")
@@ -54,7 +83,7 @@ server <- function(input, output) {
                                                       group = Season, 
                                                       color = Season,
                                                       text = paste("infected", Type_H3N2v))) +
-      labs(title = "Infected With Type A Influenza",
+      labs(title = "Infected With Type H3N2v Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
            color = "Flu Season by Year")
