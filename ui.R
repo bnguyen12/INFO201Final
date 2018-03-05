@@ -32,13 +32,30 @@ ui <- fluidPage(
         ),
         mainPanel(
           titlePanel("Influenza like illnesses compared to death rates"),
-          p("This plot displays a visual of ili cases (influenza like illnesses) alongside a plot of the desired
-            year's deaths. Severity of any illness is best represented by the number of deaths it has caused, as
-            the death count with any illness is what shocks the media most. When this media coverage happens, it 
-            is statistically prevalent that more people are checking into hospitals for ili cases out of concern 
-            for having the actual flu. Therefor, the higher the death count, the greater the number of ili cases 
-            in any given year."),
-          plotlyOutput("ili.map")
+          plotlyOutput("ili.map"),
+          br(),
+          p("This plot displays a visual of", strong("ILI cases (influenza like illnesses)"),
+            "alongside a plot of the desired year's deaths. The x-axis shows 
+            the weeks of that year, whereas the y-axis shows the percentage of",
+            strong("mortality"), "and", strong("ILI cases."), "To go more in-depth,
+            the ILI rate was the percentage of people that came into clinics
+            noting they had flu-like symptoms, such as fevers, coughts, etc.
+            and concluding themselves that they thought they had the flu."),
+          br(),
+          p("Severity of any illness is best represented by the number of 
+            deaths it has caused, as the death count with any illness is what
+            shocks the media most. When this media coverage happens, it is 
+            statistically prevalent that more people are checking into hospitals
+            for ILI cases out of concern for having the actual flu. The question
+            we were trying to answer was if the severity of the flu in media
+            had a psychological effect on people to think they had the flu
+            when they actually didn't. Using our dataset, it was seen that
+            the trendline for ILI cases nearly matched the shape of the amount
+            of deaths by the flu. Using the amount of deaths as an indicator
+            for severity, we concluded that the severity of which the media
+            portrays the flu makes more people think they have flu out of
+            concern. Thus, the higher the death count, the greater the number
+            of ILI cases in any given year.")
         )
       )
     ),
@@ -61,7 +78,27 @@ ui <- fluidPage(
         ),
         mainPanel(
           titlePanel("Pediatric Death Rate In Different Region"),
-          plotlyOutput("pediatricPlot")
+          plotlyOutput("pediatricPlot"),
+          br(),
+          p("This plot shows the", strong("rate"), "and", strong("count"),
+            "of", strong("pediatric"), "deaths due to the flu. There are
+            regions that contain certain states as listed left of the graph,
+            with seasons shown on the x-axis and rate/count on the y-axis."),
+          br(),
+          p("The question we were trying to answer was if an urban environment
+            led to less deaths by the flu because urban areas like New York 
+            City and Seattle have more resources at their disposal to quickly 
+            respond to emergencies. The data used for this divides areas by 
+            regions, rather than at the state level. Now, after
+            viewing the trends show in the graph, it's shown region six, which
+            included primarily rural areas like Oklahoma and Arkansas, had the
+            highest rate of pediatric death for the flu. In addition, regions
+            9 and 10, which had an overall flatter trendline than the other regions,
+            were comprised of highly urban states such as Washington and California.
+            Using this data, we indeed saw that urban areas overall had a lower
+            rate and count of pediatric death than rural areas, which supports
+            our assumption that an urban environment combats the flu better than
+            rural areas.")
         )
       )
     )
