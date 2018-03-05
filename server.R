@@ -68,7 +68,7 @@ server <- function(input, output, session) {
                                                       group = Season, 
                                                       color = Season,
                                                       text = paste("infected", Type_B))) +
-      labs(title = "Infected With Type A Influenza",
+      labs(title = "Infected With Type B Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
            color = "Flu Season by Year")
@@ -83,7 +83,7 @@ server <- function(input, output, session) {
                                                       group = Season, 
                                                       color = Season,
                                                       text = paste("infected", Type_H3N2v))) +
-      labs(title = "Infected With Type A Influenza",
+      labs(title = "Infected With Type H3N2v Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
            color = "Flu Season by Year")
