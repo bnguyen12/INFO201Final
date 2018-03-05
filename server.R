@@ -1,5 +1,6 @@
 source("ageFactor.R")
 source("iliFactor.R")
+source("pediatricDeathRate.R")
 
 server <- function(input, output, session) {
   
