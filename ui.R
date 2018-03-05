@@ -12,7 +12,28 @@ ui <- fluidPage(
           radioButtons("season", label = "Which Seasons",
                   c("Seasons 2012-2017" = "12-17",
                     "Seasons 2005-2011" = "05-11",
-                    "Seasons 1997-2004" = "97-04"))
+                    "Seasons 1997-2004" = "97-04")),
+          br(),
+          p("The plots shown on the right show the amount of people infected
+            with the flu. The plots differ in the type of flu that people were
+            infected with, which was predominantly of", strong("type A, type B"),
+            "and", strong("type H3N2v."), "The most common strain of the flu
+            goes from top to bottom of these plots: type A, type B, and type H3N2v.
+            The x-axis contains the age groups, the y-axis contains the number
+            of people found positive for that flu type, and the legend shows
+            the flu season color-coded by the year."),
+          br(),
+          p("This section is meant to show a strong correlation between age
+            and catching the flu. Our assumption before looking at any data was
+            that the oldest and youngest ends of the spectrum were most likely
+            to catch the flu, because that when our immune systems are the weakest.
+            However, when looking at the graphs, we see trends for recent years
+            (2012-2017) that ages 5-24 is where the peaks are for flu-positive
+            specimens. Looking at older data (2005-2011), it's shown that from
+            all three flu types, ages 5-24 was still the age group that caught
+            the flu more than others. Thus, we can conclude that age does affect
+            how likely we catch the flu, although our assumption that the youngest
+            and oldest age groups were in danger was false.")
         ),
         mainPanel(
           plotlyOutput("age.plot.type.A"),
