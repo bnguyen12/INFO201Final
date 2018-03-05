@@ -1,5 +1,6 @@
 source("ageFactor.R")
 source("iliFactor.R")
+source("pediatricDeathRate.R")
 
 ui <- fluidPage(
   titlePanel("Flu Data"),
@@ -38,6 +39,29 @@ ui <- fluidPage(
             for having the actual flu. Therefor, the higher the death count, the greater the number of ili cases 
             in any given year."),
           plotlyOutput("ili.map")
+        )
+      )
+    ),
+    tabPanel("Pediatric Death in Rural VS Urban Areas",
+      sidebarLayout(
+        sidebarPanel(
+          checkboxGroupInput("region.select", "Select Region", 
+                             c("1 - Connecticut, Maine, Massachusetts, New Hampshire, Rhode Island, and Vermont",
+                               "2 - New Jersey, New York, Puerto Rico, and the U.S. Virgin Islands",
+                               "3 - Delaware, District of Columbia, Maryland, Pennsylvania, Virginia, and West Virginia",
+                               "4 - Alabama, Florida, Georgia, Kentucky, Mississippi, North Carolina, South Carolina, and Tennessee",
+                               "5 - Illinois, Indiana, Michigan, Minnesota, Ohio, and Wisconsin", 
+                               "6 - Arkansas, Louisiana, New Mexico, Oklahoma, and Texas",
+                               "7 - Iowa, Kansas, Missouri, and Nebraska",
+                               "8 - Colorado, Montana, North Dakota, South Dakota, Utah, and Wyoming",
+                               "9 - Arizona, California, Hawaii, and Nevada",
+                               "10 - Alaska, Idaho, Oregon, and Washington"), 
+                             selected = c("10 - Alaska, Idaho, Oregon, and Washington")),
+          selectInput("target.select", "Select target", c("Rate" ,"Count"), selected = "Rate")
+        ),
+        mainPanel(
+          titlePanel("Pediatric Death Rate In Different Region"),
+          plotlyOutput("pediatricPlot")
         )
       )
     )

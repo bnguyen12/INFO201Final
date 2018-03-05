@@ -27,6 +27,12 @@ server <- function(input, output, session) {
     return(data)
   })
   
+  # Returns data set for pediatric deaths by region
+  ped.flu.data <- reactive({
+    data <- ped.flu.death.data %>% filter(REGION %in% as.numeric(gsub("([0-9]+).*$", "\\1", input$region.select)))
+    return(data)
+  })
+  
   # Renders plot of mortality vs ILI rate
   output$ili.map <- renderPlotly({
     if (input$year.death == 2016) {
@@ -90,6 +96,27 @@ server <- function(input, output, session) {
     final.plot <- ggplotly(plot, tooltip = c("text"))
     final.plot %>% layout(margin = list(l = 75, b = 75))
   })
+  
+  # Plot data for pediatric deaths in different regions
+  output$pediatricPlot <- renderPlotly({
+    if (input$target.select == "Rate") {
+      plot = ggplot(ped.flu.data(), aes(x=SEASON, y=RATE, group=REGION)) + 
+        geom_line(aes(color=as.factor(REGION))) + 
+        labs(title = "Pediatric Deaths by Region",
+             x = "Season",
+             y = "Pediatric Death Rate",
+             color = "Region")
+      ggplotly(plot, tooltip = c("y"))
+    } else {
+      plot = ggplot(ped.flu.data(), aes(x=SEASON, y=COUNT, group=REGION)) +
+        geom_line(aes(color=as.factor(REGION))) +
+        labs(title = "Pediatric Deaths by Region",
+             x = "Season",
+             y = "Pediatric Death Count",
+             color = "Region")
+      ggplotly(plot, tooltip = c("y"))
+    }
+  }) 
 }
 
 shinyServer(server)
