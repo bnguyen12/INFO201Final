@@ -56,12 +56,12 @@ ui <- fluidPage(
           plotlyOutput("ili.map"),
           br(),
           p("This plot displays a visual of", strong("ILI cases (influenza like illnesses)"),
-            "alongside a plot of the desired year's deaths. The x-axis shows 
-            the weeks of that year, whereas the y-axis shows the percentage of",
-            strong("mortality"), "and", strong("ILI cases."), "To go more in-depth,
-            the ILI rate was the percentage of people that came into clinics
-            noting they had flu-like symptoms, such as fevers, coughts, etc.
-            and concluding themselves that they thought they had the flu."),
+            "alongside a plot of the desired year's deaths from Washington state. 
+            The x-axis shows the weeks of that year, whereas the y-axis shows
+            the percentage of", strong("mortality"), "and", strong("ILI cases."),
+            "To go more in-depth, the ILI rate was the percentage of people that
+            came into clinics noting they had flu-like symptoms, such as fevers,
+            coughts, etc. and concluding themselves that they thought they had the flu."),
           br(),
           p("Severity of any illness is best represented by the number of 
             deaths it has caused, as the death count with any illness is what
