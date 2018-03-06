@@ -1,6 +1,7 @@
 source("ageFactor.R")
 source("iliFactor.R")
 source("pediatricDeathRate.R")
+source("mapData.R")
 
 server <- function(input, output, session) {
   
@@ -121,6 +122,19 @@ server <- function(input, output, session) {
       ggplotly(plot, tooltip = c("y"))
     }
   }) 
+  
+  # Make heat map of flu activity
+  output$heatMap <- renderPlotly({
+    plot <- ggplot() +
+      geom_polygon(data = locations, 
+                   aes(x = long, 
+                       y = lat, 
+                       group = group, 
+                       fill = activity,
+                       state = region), 
+                   color = "black", size = 0.1)
+    ggplotly(plot, tooltip = c("fill", "state"))
+  })
 }
 
 shinyServer(server)

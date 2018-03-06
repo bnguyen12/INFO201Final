@@ -122,6 +122,17 @@ ui <- fluidPage(
             rural areas.")
         )
       )
+    ),
+    tabPanel("Heat Map for Flu Cases",
+      sidebarLayout(
+        sidebarPanel(
+          p("Placeholder text")
+        ),
+        mainPanel(
+          titlePanel("Flu Cases in the USA"),
+          plotlyOutput("heatMap")
+        )
+      )
     )
   )
 )
