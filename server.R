@@ -43,8 +43,8 @@ server <- function(input, output, session) {
     }
     
     plot = ggplot(data = death.current.data()) +
-      geom_smooth(mapping = aes(x = WEEK, y = ILI.Rate, color = "ILI Rate")) +
-      geom_smooth(mapping = aes(x = WEEK, y = Mortality.Rate, color = "Mortality Rate")) +
+      geom_smooth(mapping = aes(x = WEEK, y = ILI.Rate, color = "ILI Rate"), se = FALSE) +
+      geom_smooth(mapping = aes(x = WEEK, y = Mortality.Rate, color = "Mortality Rate"), se = FALSE) +
       labs(title = "Mortality Rate vs ILI Rate",
            x = "Week",
            y = "Percentage (%)",
