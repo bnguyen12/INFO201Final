@@ -126,11 +126,23 @@ ui <- fluidPage(
     tabPanel("Heat Map for Flu Cases",
       sidebarLayout(
         sidebarPanel(
-          p("Placeholder text")
         ),
         mainPanel(
           titlePanel("Flu Cases in the USA"),
-          plotlyOutput("heatMap")
+          plotlyOutput("heatMap"),
+          br(),
+          p("This graph displays the", strong("level of activity in the USA"),
+            "that was diagnosed with flu. There are
+            regions of certain states that display on the graph,
+            with different levels of color to represent the level of flu activity."),
+          br(),
+          p("We were trying to figure out the activity level of flu in 50 states in the USA.
+            The level of color represents the level of flu activity in each region on the map.
+            Puerto Rico and 45 states, including Washington was reported as widespread influenza activity.
+            Guam and two states (Minnesota and Texas) were reported as regional influenza activity.
+            Local influenza activity was reported by the District of Columbia and three states (Hawaii, Oregon, and Vermont).
+            There is no influenza activity was reported by the U.S. Virgin Islands.
+            From our observations, the flu remains widespread in most of the states in the USA.")
         )
       )
     )
