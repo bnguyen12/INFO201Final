@@ -132,7 +132,12 @@ server <- function(input, output, session) {
                        group = group, 
                        fill = activity,
                        state = region), 
-                   color = "black", size = 0.1)
+                   color = "black", size = 0.1) +
+      scale_fill_brewer(palette = "Purples") +
+      labs(title = "Flu Activity in the USA",
+           x = "Longitude (degrees)",
+           y = "Latitude (degrees)",
+           fill = "Activity Level")
     ggplotly(plot, tooltip = c("fill", "state"))
   })
 }
