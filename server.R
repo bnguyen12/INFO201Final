@@ -1,7 +1,4 @@
-source("ageFactor.R")
-source("iliFactor.R")
-source("pediatricDeathRate.R")
-source("mapData.R")
+source("setup.R")
 
 server <- function(input, output, session) {
   
@@ -31,7 +28,8 @@ server <- function(input, output, session) {
   
   # Returns data set for pediatric deaths by region
   ped.flu.data <- reactive({
-    data <- ped.flu.death.data %>% filter(REGION %in% as.numeric(gsub("([0-9]+).*$", "\\1", input$region.select)))
+    data <- ped.flu.death.data %>% 
+      filter(REGION %in% as.numeric(gsub("([0-9]+).*$", "\\1", input$region.select))) #get number from a string
     return(data)
   })
   
@@ -44,8 +42,10 @@ server <- function(input, output, session) {
     }
     
     plot = ggplot(data = death.current.data()) +
-      geom_smooth(mapping = aes(x = WEEK, y = ILI.Rate, color = "ILI Rate"), se = FALSE) +
-      geom_smooth(mapping = aes(x = WEEK, y = Mortality.Rate, color = "Mortality Rate"), se = FALSE) +
+      geom_smooth(mapping = aes(x = WEEK, y = ILI.Rate, color = "ILI Rate"), 
+                  se = FALSE) +
+      geom_smooth(mapping = aes(x = WEEK, y = Mortality.Rate, 
+                                color = "Mortality Rate"), se = FALSE) +
       labs(title = "Mortality Rate vs ILI Rate",
            x = "Week",
            y = "Percentage (%)",
@@ -57,10 +57,11 @@ server <- function(input, output, session) {
   # Create a line graph for those infected with type A influenza
   output$age.plot.type.A <- renderPlotly({
     plot = ggplot() +
-      geom_line(data = infected.data(), mapping = aes(x = Age.Group, y = Type_A, 
-                                                  group = Season, 
-                                                  color = Season,
-                                                  text = paste("infected:", Type_A))) +
+      geom_line(data = infected.data(), 
+                mapping = aes(x = Age.Group, y = Type_A, 
+                              group = Season, 
+                              color = Season,
+                              text = paste("infected:", Type_A))) +
       labs(title = "Infected With Type A Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
@@ -73,10 +74,11 @@ server <- function(input, output, session) {
   # Create a line graph for those infected with type A influenza
   output$age.plot.type.B <- renderPlotly({
     plot = ggplot() +
-      geom_line(data = infected.data(), mapping = aes(x = Age.Group, y = Type_B, 
-                                                      group = Season, 
-                                                      color = Season,
-                                                      text = paste("infected", Type_B))) +
+      geom_line(data = infected.data(), 
+                mapping = aes(x = Age.Group, y = Type_B, 
+                              group = Season, 
+                              color = Season,
+                              text = paste("infected", Type_B))) +
       labs(title = "Infected With Type B Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
@@ -89,10 +91,11 @@ server <- function(input, output, session) {
   # Create line graph for those infected with "other" (H3N2v)
   output$age.plot.type.H <- renderPlotly({
     plot = ggplot() +
-      geom_line(data = infected.data(), mapping = aes(x = Age.Group, y = Type_H3N2v, 
-                                                      group = Season, 
-                                                      color = Season,
-                                                      text = paste("infected", Type_H3N2v))) +
+      geom_line(data = infected.data(), 
+                mapping = aes(x = Age.Group, y = Type_H3N2v, 
+                              group = Season, 
+                              color = Season,
+                              text = paste("infected", Type_H3N2v))) +
       labs(title = "Infected With Type H3N2v Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
@@ -103,7 +106,7 @@ server <- function(input, output, session) {
   })
   
   # Plot data for pediatric deaths in different regions
-  output$pediatricPlot <- renderPlotly({
+  output$pediatric.plot <- renderPlotly({
     if (input$target.select == "Rate") {
       plot = ggplot(ped.flu.data(), aes(x=SEASON, y=RATE, group=REGION)) + 
         geom_line(aes(color=as.factor(REGION))) + 
@@ -124,7 +127,7 @@ server <- function(input, output, session) {
   }) 
   
   # Make heat map of flu activity
-  output$heatMap <- renderPlotly({
+  output$heat.map <- renderPlotly({
     plot <- ggplot() +
       geom_polygon(data = locations, 
                    aes(x = long, 
