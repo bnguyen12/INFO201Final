@@ -1,6 +1,6 @@
 source("setup.R")
 
-ui <- fluidPage(
+ui <- fluidPage(title = "Flu in the USA",
   tags$head(
     tags$style(
       HTML('

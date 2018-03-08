@@ -3,6 +3,7 @@ library("ggplot2")
 library("shiny")
 library("plotly")
 library("RColorBrewer")
+library("maps")
 
 # Pediatric flu death data
 ped.flu.death.data <- read.csv("./data/PedFluDeath_MapData.csv")
