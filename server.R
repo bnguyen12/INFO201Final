@@ -65,7 +65,7 @@ server <- function(input, output, session) {
       labs(title = "Infected With Type A Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
-           color = "Flu Season by Year") +
+           color = "Flu Season") +
       scale_x_discrete(limits=c("0-4 yr","5-24 yr","25-64 yr", "65+ yr"))
     final.plot <- ggplotly(plot, tooltip = c("text"))
     final.plot %>% layout(margin = list(l = 75, b = 75)) #shift axes text to the left to not overlap axis ticks
@@ -82,7 +82,7 @@ server <- function(input, output, session) {
       labs(title = "Infected With Type B Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
-           color = "Flu Season by Year") +
+           color = "Flu Season") +
       scale_x_discrete(limits=c("0-4 yr","5-24 yr","25-64 yr", "65+ yr"))
     final.plot <- ggplotly(plot, tooltip = c("text"))
     final.plot %>% layout(margin = list(l = 75, b = 75))
@@ -99,7 +99,7 @@ server <- function(input, output, session) {
       labs(title = "Infected With Type H3N2v Influenza",
            x = "Age Group (years)",
            y = "# Found Positive (people)",
-           color = "Flu Season by Year") +
+           color = "Flu Season") +
       scale_x_discrete(limits=c("0-4 yr","5-24 yr","25-64 yr", "65+ yr"))
     final.plot <- ggplotly(plot, tooltip = c("text"))
     final.plot %>% layout(margin = list(l = 75, b = 75))
